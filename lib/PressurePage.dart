@@ -33,7 +33,7 @@ class PressurePage extends StatelessWidget {
         ? const Center(child: CircularProgressIndicator())
         : LineChart(
             _createPressureSeries(),
-            // animate: true,
+            animate: true,
             primaryMeasureAxis: charts.NumericAxisSpec(
               renderSpec: charts.GridlineRendererSpec(
                 labelStyle: charts.TextStyleSpec(

@@ -12,7 +12,7 @@ class TemperaturePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pressure Page'),
+        title: const Text('Temperature Page'),
       ),
       body: Center(
         child: Card(
