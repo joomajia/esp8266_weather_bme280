@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class HumidityPage extends StatelessWidget {
   final List<HumidityData> humidityData;
 
-  const HumidityPage({super.key, required this.humidityData});
+  const HumidityPage({Key? key, required this.humidityData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +18,54 @@ class HumidityPage extends StatelessWidget {
         child: Card(
           elevation: 4,
           margin: const EdgeInsets.all(16),
+          color: Colors.white60, // Светлый фон Card
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: humidityData.isEmpty
-                ? const CircularProgressIndicator()
-                : LineChart(
-                    _createHumiditySeries(),
-                    animate: true,
-                  ),
+            child: _buildHumidityChart(),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildHumidityChart() {
+    return humidityData.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : LineChart(
+            _createHumiditySeries(),
+            // animate: true,
+            primaryMeasureAxis: charts.NumericAxisSpec(
+              renderSpec: charts.GridlineRendererSpec(
+                labelStyle: charts.TextStyleSpec(
+                  fontSize: 12,
+                  color: charts.MaterialPalette.black,
+                ),
+                lineStyle: charts.LineStyleSpec(
+                  thickness: 2, // Толщина линии сетки
+                ),
+              ),
+              tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                desiredTickCount: 12, // Увеличенное количество делений
+              ),
+            ),
+            domainAxis: charts.NumericAxisSpec(
+              renderSpec: charts.GridlineRendererSpec(
+                labelStyle: charts.TextStyleSpec(
+                  fontSize: 12,
+                  color: charts.MaterialPalette.black,
+                ),
+                lineStyle: charts.LineStyleSpec(
+                  thickness: 2, // Толщина линии сетки
+                ),
+              ),
+              tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                desiredTickCount: 7, // Увеличенное количество делений
+              ),
+            ),
+            defaultRenderer: charts.LineRendererConfig(
+              strokeWidthPx: 4, // Увеличенная толщина линии показа данных
+            ),
+          );
   }
 
   List<charts.Series<HumidityData, int>> _createHumiditySeries() {

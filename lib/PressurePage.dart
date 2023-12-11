@@ -18,19 +18,78 @@ class PressurePage extends StatelessWidget {
         child: Card(
           elevation: 4,
           margin: const EdgeInsets.all(16),
+          color: Colors.white60, // Светлый фон Card
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: pressureData.isEmpty
-                ? const CircularProgressIndicator()
-                : LineChart(
-                    _createPressureSeries(),
-                    animate: true,
-                  ),
+            child: _buildPressureChart(),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildPressureChart() {
+    return pressureData.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : LineChart(
+            _createPressureSeries(),
+            // animate: true,
+            primaryMeasureAxis: charts.NumericAxisSpec(
+              renderSpec: charts.GridlineRendererSpec(
+                labelStyle: charts.TextStyleSpec(
+                  fontSize: 12,
+                  color: charts.MaterialPalette.black,
+                ),
+                lineStyle: charts.LineStyleSpec(
+                  thickness: 2, // Толщина линии сетки
+                ),
+              ),
+              tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                desiredTickCount: 10, // Увеличенное количество делений
+              ),
+            ),
+            domainAxis: charts.NumericAxisSpec(
+              renderSpec: charts.GridlineRendererSpec(
+                labelStyle: charts.TextStyleSpec(
+                  fontSize: 12,
+                  color: charts.MaterialPalette.black,
+                ),
+                lineStyle: charts.LineStyleSpec(
+                  thickness: 2, // Толщина линии сетки
+                ),
+              ),
+              tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                desiredTickCount: 7, // Увеличенное количество делений
+              ),
+            ),
+            defaultRenderer: charts.LineRendererConfig(
+              strokeWidthPx: 4, // Увеличенная толщина линии показа данных
+            ),
+          );
+  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: const Text('Pressure Page'),
+  //     ),
+  //     body: Center(
+  //       child: Card(
+  //         elevation: 4,
+  //         margin: const EdgeInsets.all(16),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(16),
+  //           child: pressureData.isEmpty
+  //               ? const CircularProgressIndicator()
+  //               : LineChart(
+  //                   _createPressureSeries(),
+  //                   animate: true,
+  //                 ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   List<charts.Series<PressureData, int>> _createPressureSeries() {
     List<PressureData> last8Data = pressureData.length > 8
